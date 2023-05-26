@@ -1,11 +1,11 @@
 import random
-
+import time
 import numpy as np
 
 
-def q_learning(env, num_episodes=1000000,
+def q_learning(env, num_episodes=100000,
                max_steps=99, learning_rate=0.3,
-               discount_rate=0.8,
+               discount_rate=0,
                epsilon=1.0,
                decay_rate=0.005):
     # initialize q-table
@@ -14,13 +14,15 @@ def q_learning(env, num_episodes=1000000,
     qtable = np.zeros((state_size, action_size))
 
     # training
+
+    start_time = time.time()
     for episode in range(num_episodes):
 
         # reset the environment
         state = env.reset()
         done = False
         pre = (0, 0, False, None)
-        if episode%100==0:
+        if episode%10000==0:
             print("Learning : Episode --> " + str(episode))
         for s in range(max_steps):
 
@@ -49,8 +51,8 @@ def q_learning(env, num_episodes=1000000,
 
         # Decrease epsilon
         epsilon = np.exp(-decay_rate * episode)
-
-    print(f"Training completed over {num_episodes} episodes")
+    finish_time = time.time()
+    print(f"Training completed over {num_episodes} episodes \n time_elapsed:{finish_time-start_time}")
     input("Press Enter to watch trained agent...")
-
+    np.save("qlearning100k0gamma",qtable)
     return qtable

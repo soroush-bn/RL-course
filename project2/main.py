@@ -1,10 +1,17 @@
 from gym.wrappers import RecordEpisodeStatistics
-from stable_baselines3.common.monitor import Monitor
+# from stable_baselines3.common.monitor import Monitor
 import gym
 from qlearning import q_learning
 # from project2.wrapper import AdditionalActions, DiagonalEnv
 from wrapper import AdditionalActions, DiagonalEnv
+# from gym.wrappers import Monitor
 import numpy as np
+from stable_baselines3.common.monitor import Monitor
+from utils import plot_steps_reward
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+
+from project2.utils import plot_results
 
 """
     0: Move south (down)
@@ -32,10 +39,13 @@ Destinations:
 """
 
 if __name__ == '__main__':
+    log_dir = "/tmp/qlearning"
     env = gym.make('Taxi-v3')
     env = RecordEpisodeStatistics(env)
+    env = Monitor(env,"qlearning100k0gamma")
     env = AdditionalActions(env)
     env = DiagonalEnv(env)
+
     print(env.action_space)
     print(env.observation_space)
 
@@ -66,6 +76,7 @@ if __name__ == '__main__':
 
     state = env.reset()
     print("before playing: "  + str(list(env.decode(env.s))))
+    arr_rewards= []
     for s in range(100):
 
         print(f"TRAINED AGENT")
@@ -76,6 +87,7 @@ if __name__ == '__main__':
         new_state, reward, done, info = env.step(action,pre)
         pre = (new_state, reward, done, info)
         rewards += reward
+        arr_rewards.append(reward)
         env.render()
         print(f"score: {rewards}")
         state = new_state
@@ -84,5 +96,5 @@ if __name__ == '__main__':
 
         if done == True:
             break
-
+    plot_steps_reward(arr_rewards,"qlearning100k0gamma")
     env.close()
