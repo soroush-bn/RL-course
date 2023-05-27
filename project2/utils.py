@@ -70,5 +70,5 @@ if __name__ == '__main__':
     # results_plotter.plot_results(
     #     [log_dir], 1e5, results_plotter.X_TIMESTEPS, "TD3 LunarLander"
     # )
-    plot_csv_logs("./","qlearning1mil.monitor.csv")
+    plot_csv_logs("./","sarsa100k0gamma.monitor.csv")
     sleep(4)

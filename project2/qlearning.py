@@ -2,10 +2,10 @@ import random
 import time
 import numpy as np
 
-
+#off-policy TD control
 def q_learning(env, num_episodes=100000,
                max_steps=99, learning_rate=0.3,
-               discount_rate=0,
+               discount_rate=.9,
                epsilon=1.0,
                decay_rate=0.005):
     # initialize q-table
